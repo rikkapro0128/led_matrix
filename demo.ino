@@ -3,6 +3,7 @@
 #define clockPin 12
 #define NUMBER_HC595 2
 #define NUMBER_CHARACTER 12
+#define COLUMN 8
 
 void setup()
 {
@@ -13,21 +14,7 @@ void setup()
 	pinMode(clockPin, OUTPUT);
 }
 
-/*     __________________________________________________  
-    0  |      |      |      |      |      |      |      |     
-    0  |      |      |      |      |      |      |      |
-    0  |      |      |      |      |      |      |      |
-    0  |      |      |      |      |      |      |      |
-    0  |      |      |      |      |      |      |      |
-    0  |      |      |      |      |      |      |      |
-    0  |      |      |      |      |      |      |      |
-    0  |      |      |      |      |      |      |      |
-    0  |      |      |      |      |      |      |      |
-       __________________________________________________
-        1     1      1      1      1      1      1      1
-*/
-
-const char ledStatus[NUMBER_CHARACTER][8] = // 1 is LOW, 0 is HIGH and this is array scan arrow
+const char ledStatus[NUMBER_CHARACTER][COLUMN] = // 1 is LOW, 0 is HIGH and this is array scan arrow
 {
     {0xFF,0xC1,0x80,0xBE,0xBE,0x80,0xC1,0xFF}, // 0
     {0xFF,0xE7,0xF3,0xF9,0x00,0x00,0xFF,0xFF}, // 1
@@ -51,7 +38,7 @@ void clearData() {
     }
 }
 
-void showCharacter(const char ledStatus[][8], unsigned int duration) 
+void showCharacter(const char ledStatus[NUMBER_CHARACTER][COLUMN], unsigned int duration) 
 {
     for(int i = 0; i < NUMBER_CHARACTER; i++) {
         // duration = (i == 11) ? 5000 : duration;
@@ -63,7 +50,7 @@ void showCharacter(const char ledStatus[][8], unsigned int duration)
             {
                 int dem = 0;
                 unsigned long temp = 0;
-                for(int j = 0; j < 8; j++) { // loop for show one character
+                for(int j = 0; j < COLUMN; j++) { // loop for show one character
                     clearData(); // clear data before latch pin
                     digitalWrite(latchPin, 0);
                     shiftOut(dataPin, clockPin, LSBFIRST, ledStatus[i][j]);
